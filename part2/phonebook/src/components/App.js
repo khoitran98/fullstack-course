@@ -73,9 +73,9 @@ const App = () => {
         }
         if (persons.find(element => element.name === newName) != null)
         {
+            let id = persons.find(element => element.name === newName).id
             if (window.confirm(`${newName} is already added to phonebook, replace the old number with the new one?`))
             {
-                let id = persons.find(element => element.name === newName).id
                 serv.update(id,person)
                 .then(response => {
                 console.log(response)
@@ -92,7 +92,7 @@ const App = () => {
                 setTimeout(() => {
                     setMessage(null)
                 }, 5000)
-                setPersons(persons.filter(n => n.id !== id))
+                //setPersons(persons.filter(n => n.id !== id))
                 })
             }
             return
@@ -116,6 +116,10 @@ const App = () => {
         }, 5000)
         })
         return
+        }).catch(error => {
+            // this is the way to access the error message
+            console.log('error')
+            console.log(error.response.data)
         })
     }
     const addFilter = (event) => {
@@ -134,10 +138,10 @@ const App = () => {
         console.log(event.target.value)
         setFilt(event.target.value)
     }
-    const handleDelete = (id) => {
+    const handleDelete = (name) => {
         if (!window.confirm("Delete this person?"))
             return
-        serv.del(id)
+        serv.del(name)
         .then(response => {
         console.log(response)
         serv
@@ -165,7 +169,7 @@ const App = () => {
                 {namesToShow.map((person, i) => 
                 <div>
                 <Note key={i} note={person}/>
-                <button onClick={() => handleDelete(person.id)}> delete </button>
+                <button onClick={() => handleDelete(person.name)}> delete </button>
                 </div>
                 )}
             </ul>
