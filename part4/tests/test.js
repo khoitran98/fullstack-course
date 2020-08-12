@@ -114,50 +114,70 @@ const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
-test('blogs are returned as json', async () => {
-  const response = await api
-    .get('/api/blogs')
-    expect(response.body).toHaveLength(25)
-})
-test('blogs are returned as json', async () => {
-    const res = await api.get('/api/blogs')
-    const length = res.body.length
+// test('blogs are returned as json', async () => {
+//   const response = await api
+//     .get('/api/blogs')
+//     expect(response.body).toHaveLength(25)
+// })
+// test('blogs are returned as json', async () => {
+//     const res = await api.get('/api/blogs')
+//     const length = res.body.length
+//     const blog = {
+//         "title": 'wth',
+//         "author": 'wth',
+//         "url": 'dd',
+//         "likes": 4
+//     }
+//     await api
+//       .post('/api/blogs').send(blog)
+//     const response = await api
+//         .get('/api/blogs')
+//     expect(response.body).toHaveLength(length + 1)
+// })
+// test('blogs are returned as json', async () => {
+//     const blog = {
+//         "title": 'wth',
+//         "author": 'wth',
+//         "url": 'wth',
+//     }
+//     const response = await api.post('/api/blogs').send(blog)
+//     expect(response.body.likes).toBe(0)
+// })
+// test('blogs are returned as json', async () => {
+//     const blog = {
+//         "author": 'wth',
+//     }
+//     const response = await api.post('/api/blogs').send(blog)
+//     expect(response.status).toBe(400)
+// })
+// test('blogs are returned as json', async () => {
+//     const blog = {
+//         "title": 'wth',
+//         "author": 'wth',
+//         "url": 'vl'
+//     }
+//     const response = await api.post('/api/blogs').send(blog)
+//     expect(response.body._id).toBeDefined();    
+// })
+test('with token', async () => {
     const blog = {
         "title": 'wth',
         "author": 'wth',
-        "url": 'dd',
-        "likes": 4
+        "url": 'vl',
+        "userId": '5f3351d9845bc685208daf61'
     }
-    await api
-      .post('/api/blogs').send(blog)
-    const response = await api
-        .get('/api/blogs')
-    expect(response.body).toHaveLength(length + 1)
-})
-test('blogs are returned as json', async () => {
-    const blog = {
-        "title": 'wth',
-        "author": 'wth',
-        "url": 'wth',
-    }
-    const response = await api.post('/api/blogs').send(blog)
-    expect(response.body.likes).toBe(0)
-})
-test('blogs are returned as json', async () => {
-    const blog = {
-        "author": 'wth',
-    }
-    const response = await api.post('/api/blogs').send(blog)
-    expect(response.status).toBe(400)
-})
-test('blogs are returned as json', async () => {
-    const blog = {
-        "title": 'wth',
-        "author": 'wth',
-        "url": 'vl'
-    }
-    const response = await api.post('/api/blogs').send(blog)
+    const response = await api.post('/api/blogs').send(blog).set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Imtob2l0cmFuOTgiLCJpZCI6IjVmMzM1MWQ5ODQ1YmM2ODUyMDhkYWY2MSIsImlhdCI6MTU5NzIxMjAzOH0.-pzcFWcLqAKNlCGiL2zBtnWSqU8UfJv_4q7ckg4I9-Q')
     expect(response.body._id).toBeDefined();    
+})
+test('without token', async () => {
+    const blog = {
+        "title": 'wth',
+        "author": 'wth',
+        "url": 'vl',
+        "userId": '5f3351d9845bc685208daf61'
+    }
+    const response = await api.post('/api/blogs').send(blog)
+    expect(response.status).toBe(401);    
 })
 
 afterAll(() => {
