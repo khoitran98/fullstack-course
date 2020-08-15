@@ -15,6 +15,7 @@ blogsRouter.get('/:id', async  (request, response, next) => {
         response.status(404).end()
     }
 })
+
 // const getTokenFrom = request => {
 //     const authorization = request.get('authorization')
 //     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
@@ -61,7 +62,7 @@ blogsRouter.delete('/:id', async  (request, response, next) => {
     {
         return response.status(401).json({ error: 'user is not the blog author' })
     }
-    await Blog.findByIdAndRemove(request.params.id).catch(error => next(error))
+    await Blog.findByIdAndDelete(request.params.id).catch(error => next(error))
     response.status(204).end()
 })
 
